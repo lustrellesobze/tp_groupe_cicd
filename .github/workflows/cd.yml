@@ -1,0 +1,188 @@
+name: CD — Docker Hub & Déploiement o2switch
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  # ─────────────────────────────────────────────
+  #  JOB 1 : BUILD & PUSH DOCKER HUB
+  # ─────────────────────────────────────────────
+  docker-hub:
+    name: 🐳 Build & Push Docker Hub
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Login Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_TOKEN }}
+
+      - name: Docker meta — Backend
+        id: meta-backend
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ secrets.DOCKER_HUB_USERNAME }}/taskflow-backend
+          tags: |
+            type=sha,prefix=
+            type=raw,value=latest
+
+      - name: Docker meta — Frontend
+        id: meta-frontend
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ secrets.DOCKER_HUB_USERNAME }}/taskflow-frontend
+          tags: |
+            type=sha,prefix=
+            type=raw,value=latest
+
+      - name: Build & Push Backend image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          file: ./backend/Dockerfile
+          push: true
+          tags: ${{ steps.meta-backend.outputs.tags }}
+          labels: ${{ steps.meta-backend.outputs.labels }}
+
+      - name: Build & Push Frontend image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./frontend
+          file: ./frontend/Dockerfile
+          push: true
+          tags: ${{ steps.meta-frontend.outputs.tags }}
+          labels: ${{ steps.meta-frontend.outputs.labels }}
+
+      - name: Résumé Docker Hub
+        run: |
+          echo "✅ Images publiées sur Docker Hub :"
+          echo "   🔹 ${{ secrets.DOCKER_HUB_USERNAME }}/taskflow-backend:latest"
+          echo "   🔹 ${{ secrets.DOCKER_HUB_USERNAME }}/taskflow-frontend:latest"
+
+  # ─────────────────────────────────────────────
+  #  JOB 2 : DÉPLOIEMENT FRONTEND → o2switch
+  # ─────────────────────────────────────────────
+  deploy-frontend:
+    name: 🚀 Deploy Frontend → taskflow.cdwfs.net
+    runs-on: ubuntu-latest
+    needs: docker-hub
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install & Build
+        working-directory: frontend
+        env:
+          VITE_API_BASE_URL: https://taskflow.cdwfs.net/api/v1
+        run: |
+          npm ci
+          npm run build
+
+      - name: Deploy dist/ → o2switch via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.O2SWITCH_FTP_HOST }}
+          username: ${{ secrets.O2SWITCH_FTP_USER }}
+          password: ${{ secrets.O2SWITCH_FTP_PASSWORD }}
+          local-dir: frontend/dist/
+          server-dir: ${{ secrets.O2SWITCH_FRONTEND_FTP_PATH }}
+          exclude: |
+            **/.git*
+            **/.git*/**
+
+  # ─────────────────────────────────────────────
+  #  JOB 3 : DÉPLOIEMENT BACKEND → o2switch (FTP)
+  #  Structure : ci-cd_groupe3/api/ (même dossier que le frontend)
+  #  ⚠️  Après le 1er déploiement, lancer manuellement dans
+  #  le terminal cPanel : composer install + php artisan migrate
+  # ─────────────────────────────────────────────
+  deploy-backend:
+    name: 🚀 Deploy Backend Laravel → o2switch (FTP)
+    runs-on: ubuntu-latest
+    needs: docker-hub
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Créer le fichier .env de production
+        run: |
+          cat > backend/.env << EOF
+          APP_NAME=TaskFlow
+          APP_ENV=production
+          APP_DEBUG=false
+          APP_URL=https://taskflow.cdwfs.net
+
+          DB_CONNECTION=mysql
+          DB_HOST=localhost
+          DB_PORT=3306
+          DB_DATABASE=${{ secrets.DB_DATABASE }}
+          DB_USERNAME=${{ secrets.DB_USERNAME }}
+          DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+
+          JWT_SECRET=${{ secrets.JWT_SECRET }}
+          JWT_TTL=60
+
+          CACHE_DRIVER=file
+          SESSION_DRIVER=file
+          QUEUE_CONNECTION=sync
+          EOF
+
+      - name: Deploy backend/ → o2switch via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.O2SWITCH_FTP_HOST }}
+          username: ${{ secrets.O2SWITCH_FTP_USER }}
+          password: ${{ secrets.O2SWITCH_FTP_PASSWORD }}
+          local-dir: backend/
+          server-dir: ${{ secrets.O2SWITCH_BACKEND_FTP_PATH }}
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/vendor/**
+            **/node_modules/**
+            **/.env.example
+
+  # ─────────────────────────────────────────────
+  #  JOB 4 : HEALTHCHECK
+  # ─────────────────────────────────────────────
+  healthcheck:
+    name: 🩺 Healthcheck
+    runs-on: ubuntu-latest
+    needs: [deploy-frontend, deploy-backend]
+
+    steps:
+      - name: Attendre que le serveur soit prêt (30s)
+        run: sleep 30
+
+      - name: Vérifier le frontend
+        run: |
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://taskflow.cdwfs.net)
+          if [ "$STATUS" != "200" ]; then
+            echo "❌ Frontend KO — HTTP $STATUS"
+            exit 1
+          fi
+          echo "✅ Frontend OK — HTTP $STATUS"
+
+      - name: Vérifier l'API backend
+        run: |
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://taskflow.cdwfs.net/api/v1/auth/login -X POST -H "Content-Type: application/json" -d '{}')
+          if [ "$STATUS" = "000" ]; then
+            echo "❌ API backend injoignable"
+            exit 1
+          fi
+          echo "✅ API backend répond — HTTP $STATUS"
