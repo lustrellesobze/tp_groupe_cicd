@@ -5,10 +5,7 @@ import { getStoredToken } from './api/client';
 import { ShellLayout } from './components/ShellLayout';
 import { LoginPage } from './pages/LoginPage';
 import { RegisterPage } from './pages/RegisterPage';
-import { ProjectsPage } from './pages/ProjectsPage';
-import { ProjectPage } from './pages/ProjectPage';
 import { DashboardPage } from './pages/DashboardPage';
-import { LandingPage } from './pages/LandingPage';
 
 function Protected({ children }: { children: ReactNode }) {
   const { user, loading } = useAuth();
@@ -28,7 +25,7 @@ function Protected({ children }: { children: ReactNode }) {
 export default function App() {
   return (
     <Routes>
-      <Route path="/" element={<LandingPage />} />
+      <Route path="/" element={<Navigate to="/login" replace />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route
@@ -39,10 +36,8 @@ export default function App() {
           </Protected>
         )}
       >
-        <Route path="projects" element={<ProjectsPage />} />
-        <Route path="projects/:id" element={<ProjectPage />} />
         <Route path="dashboard" element={<DashboardPage />} />
-        <Route index element={<Navigate to="projects" replace />} />
+        <Route index element={<Navigate to="dashboard" replace />} />
       </Route>
     </Routes>
   );

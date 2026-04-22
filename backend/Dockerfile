@@ -5,9 +5,6 @@ RUN apk add --no-cache \
     curl \
     git \
     unzip \
-    libpng-dev \
-    libjpeg-turbo-dev \
-    libwebp-dev \
     oniguruma-dev \
     libxml2-dev \
     && docker-php-ext-install \
@@ -16,9 +13,7 @@ RUN apk add --no-cache \
         mbstring \
         xml \
         bcmath \
-        tokenizer \
-        ctype \
-        opcache
+    && docker-php-ext-enable opcache
 
 RUN curl -sS https://getcomposer.org/installer | php -- \
     --install-dir=/usr/local/bin --filename=composer
