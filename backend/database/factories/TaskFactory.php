@@ -17,8 +17,8 @@ class TaskFactory extends Factory
     {
         return [
             'project_id' => Project::factory(),
-            'title' => fake()->sentence(4),
-            'body' => fake()->optional()->paragraph(),
+            'title' => $this->faker->sentence(4),
+            'body' => $this->faker->optional()->paragraph(),
             'status' => Task::STATUS_BACKLOG,
             'position' => 0,
             'assignee_id' => null,
