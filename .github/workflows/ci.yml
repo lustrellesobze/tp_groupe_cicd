@@ -3,7 +3,6 @@ name: CI — Lint, Tests & Build
 on:
   push:
     branches:
-      - master
       - develop
       - 'feature/**'
   pull_request:
