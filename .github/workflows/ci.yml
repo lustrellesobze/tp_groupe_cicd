@@ -47,6 +47,10 @@ jobs:
           php artisan key:generate
           php artisan jwt:secret --force
 
+      - name: Lint PHP (Laravel Pint)
+        working-directory: backend
+        run: ./vendor/bin/pint --test
+
       - name: Run tests (SQLite in-memory)
         working-directory: backend
         env:
@@ -76,6 +80,10 @@ jobs:
       - name: Install dependencies
         working-directory: frontend
         run: npm ci
+
+      - name: Lint TypeScript (ESLint)
+        working-directory: frontend
+        run: npm run lint
 
       - name: TypeScript check + Build
         working-directory: frontend
