@@ -1,16 +1,7 @@
-# Bloquer tout accès direct à ce dossier depuis le navigateur.
-# Seul api/public/ est accessible via les règles du .htaccess parent.
 Options -Indexes
 
-<IfModule mod_rewrite.c>
-    RewriteEngine On
-    # Tout accès direct non passé par public/ est refusé
-    RewriteCond %{REQUEST_URI} !^/api/public/
-    RewriteRule ^(?!public/) - [F,L]
-</IfModule>
-
-# Protection fichiers sensibles
-<FilesMatch "\.(env|json|lock|xml|md|sh|gitignore|gitattributes)$">
+# Protection fichiers sensibles Laravel
+<FilesMatch "^(\.env|composer\.(json|lock)|phpunit\.xml|artisan|\.gitignore|\.gitattributes)$">
     Order Allow,Deny
     Deny from all
 </FilesMatch>
