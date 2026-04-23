@@ -2,6 +2,6 @@
 // Chaque membre travaille dans son module dédié
 
 export * as AuthModule from './auth';
-// export * as ProjectModule from './project'; // module ngokeng-rayan — à ajouter via PR
+export * as ProjectModule from './project';
 export * as TaskModule from './task';
 export * as DashboardModule from './dashboard';

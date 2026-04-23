@@ -6,6 +6,8 @@ import { ShellLayout } from './components/ShellLayout';
 import { LoginPage } from './pages/LoginPage';
 import { RegisterPage } from './pages/RegisterPage';
 import { DashboardPage } from './pages/DashboardPage';
+import { ProjectsPage } from './pages/ProjectsPage';
+import { ProjectPage } from './pages/ProjectPage';
 
 function Protected({ children }: { children: ReactNode }) {
   const { user, loading } = useAuth();
@@ -37,6 +39,8 @@ export default function App() {
         )}
       >
         <Route path="dashboard" element={<DashboardPage />} />
+        <Route path="projects" element={<ProjectsPage />} />
+        <Route path="projects/:id" element={<ProjectPage />} />
         <Route index element={<Navigate to="dashboard" replace />} />
       </Route>
     </Routes>
