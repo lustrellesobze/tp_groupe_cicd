@@ -1,21 +1,81 @@
 name: CD — Docker Hub & Déploiement o2switch
 
 on:
-  workflow_run:
-    workflows: ["CI — Lint, Tests & Build"]
-    types:
-      - completed
+  push:
     branches:
       - master
 
 jobs:
+  # ─────────────────────────────────────────────
+  #  JOB CI-1 : TESTS BACKEND
+  # ─────────────────────────────────────────────
+  backend-ci:
+    name: 🐘 Backend — Tests PHP
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup PHP 8.2
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, pdo, pdo_sqlite, sqlite3, tokenizer, xml, ctype, json, bcmath, openssl
+          coverage: none
+      - name: Cache Composer
+        uses: actions/cache@v4
+        with:
+          path: backend/vendor
+          key: composer-${{ hashFiles('backend/composer.lock') }}
+          restore-keys: composer-
+      - name: Install dependencies
+        working-directory: backend
+        run: composer install --prefer-dist --no-progress --no-interaction
+      - name: Prepare environment
+        working-directory: backend
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+          php artisan jwt:secret --force
+      - name: Run tests
+        working-directory: backend
+        env:
+          APP_ENV: testing
+          DB_CONNECTION: sqlite
+          DB_DATABASE: ":memory:"
+        run: php artisan test --stop-on-failure
+
+  # ─────────────────────────────────────────────
+  #  JOB CI-2 : TESTS & BUILD FRONTEND
+  # ─────────────────────────────────────────────
+  frontend-ci:
+    name: ⚛️  Frontend — TypeScript, Tests & Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+      - name: Install dependencies
+        working-directory: frontend
+        run: npm ci
+      - name: TypeScript check + Build
+        working-directory: frontend
+        run: npm run build
+      - name: Unit tests
+        working-directory: frontend
+        run: npm run test
+
   # ─────────────────────────────────────────────
   #  JOB 1 : BUILD & PUSH DOCKER HUB
   # ─────────────────────────────────────────────
   docker-hub:
     name: 🐳 Build & Push Docker Hub
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    needs: [backend-ci, frontend-ci]
 
     steps:
       - name: Checkout
