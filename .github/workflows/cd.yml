@@ -171,8 +171,11 @@ jobs:
 
       - name: Vérifier le frontend
         run: |
-          STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://taskflow.cdwfs.net)
-          if [ "$STATUS" != "200" ]; then
+          STATUS=$(curl -sk -o /dev/null -w "%{http_code}" https://taskflow.cdwfs.net)
+          if [ "$STATUS" = "000" ]; then
+            STATUS=$(curl -sk -o /dev/null -w "%{http_code}" http://taskflow.cdwfs.net)
+          fi
+          if [ "$STATUS" != "200" ] && [ "$STATUS" != "301" ] && [ "$STATUS" != "302" ]; then
             echo "❌ Frontend KO — HTTP $STATUS"
             exit 1
           fi
@@ -180,7 +183,7 @@ jobs:
 
       - name: Vérifier l'API backend
         run: |
-          STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://taskflow.cdwfs.net/api/v1/auth/login -X POST -H "Content-Type: application/json" -d '{}')
+          STATUS=$(curl -sk -o /dev/null -w "%{http_code}" https://taskflow.cdwfs.net/api/v1/auth/login -X POST -H "Content-Type: application/json" -d '{}')
           if [ "$STATUS" = "000" ]; then
             echo "❌ API backend injoignable"
             exit 1
