@@ -124,6 +124,7 @@ jobs:
           cat > backend/.env << EOF
           APP_NAME=TaskFlow
           APP_ENV=production
+          APP_KEY=
           APP_DEBUG=false
           APP_URL=https://taskflow.cdwfs.net
 
