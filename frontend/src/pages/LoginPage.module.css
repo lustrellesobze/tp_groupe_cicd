@@ -278,7 +278,7 @@
   width: 100%;
   min-height: 2.6rem;
   margin-top: 0.2rem;
-  background: linear-gradient(135deg, var(--t-rust), #be4129);
+  background: linear-gradient(135deg, var(--t-rust), green);
   color: #fff8f1;
   border: none;
   border-radius: 0.45rem;
