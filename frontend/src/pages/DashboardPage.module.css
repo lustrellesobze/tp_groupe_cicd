@@ -9,12 +9,14 @@
   border-radius: var(--tf-radius);
   background: linear-gradient(
     125deg,
-    color-mix(in srgb, var(--tf-primary) 18%, var(--tf-bg-elevated)) 0%,
+    color-mix(in srgb, var(--tf-primary) 12%, var(--tf-bg-elevated)) 0%,
     var(--tf-bg-elevated) 45%,
-    color-mix(in srgb, var(--tf-accent) 12%, var(--tf-bg-elevated)) 100%
+    color-mix(in srgb, var(--tf-accent) 14%, var(--tf-bg-elevated)) 100%
   );
-  border: 1px solid color-mix(in srgb, var(--tf-primary) 20%, var(--tf-border));
-  box-shadow: var(--tf-shadow-md);
+  border: 1px solid color-mix(in srgb, var(--tf-accent) 20%, var(--tf-border));
+  box-shadow:
+    0 4px 16px rgba(27, 23, 18, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
   margin-bottom: var(--space-block);
   overflow: hidden;
 }
@@ -26,7 +28,7 @@
   top: -30%;
   width: 50%;
   height: 150%;
-  background: radial-gradient(circle, color-mix(in srgb, var(--tf-primary) 15%, transparent) 0%, transparent 70%);
+  background: radial-gradient(circle, color-mix(in srgb, var(--tf-accent) 12%, transparent) 0%, transparent 70%);
   pointer-events: none;
 }
 
@@ -73,7 +75,7 @@
 }
 
 .statCard:hover {
-  border-color: color-mix(in srgb, var(--tf-primary) 30%, var(--tf-border));
+  border-color: color-mix(in srgb, var(--tf-accent) 30%, var(--tf-border));
   box-shadow: var(--tf-shadow-md);
   transform: translateY(-1px);
 }

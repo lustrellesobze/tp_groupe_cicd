@@ -1,36 +1,36 @@
 /*
-  TaskFlow — palette
-  Fond: lavande très clair | Accents: indigo + sarcelle
-  Texte: bleu nuit | États: gris, bleu, ambre, vert
+  TaskFlow — palette papier / encre / rouille / sauge
+  Fond: papier chaud | Accents: rouille + sauge
+  Texte: encre | Polices: DM Sans + Syne
 */
 :root {
-  --tf-bg: #f0f2fa;
-  --tf-bg-elevated: #ffffff;
-  --tf-text: #0f172a;
-  --tf-text-muted: #64748b;
-  --tf-border: #e2e8f0;
-  --tf-primary: #6366f1;
-  --tf-primary-hover: #818cf8;
-  --tf-primary-pressed: #4f46e5;
-  --tf-accent: #14b8a6;
-  --tf-danger: #ef4444;
-  --tf-warn: #f59e0b;
-  --tf-success: #10b981;
+  --tf-bg: #f7f1e6;
+  --tf-bg-elevated: #fffdf8;
+  --tf-text: #1b1712;
+  --tf-text-muted: #6d6258;
+  --tf-border: #e9dcc7;
+  --tf-primary: #d35a3a;
+  --tf-primary-hover: #e47a5d;
+  --tf-primary-pressed: #be4129;
+  --tf-accent: #2f8f75;
+  --tf-danger: #c0392b;
+  --tf-warn: #e67e22;
+  --tf-success: #27ae60;
   --tf-radius: 12px;
   --tf-radius-sm: 8px;
-  --tf-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
-  --tf-shadow-md: 0 4px 16px rgba(15, 23, 42, 0.08);
-  --tf-shadow-lg: 0 12px 40px rgba(15, 23, 42, 0.12);
+  --tf-shadow: 0 1px 3px rgba(27, 23, 18, 0.08);
+  --tf-shadow-md: 0 4px 16px rgba(27, 23, 18, 0.08);
+  --tf-shadow-lg: 0 12px 40px rgba(27, 23, 18, 0.12);
   --space-page: clamp(0.75rem, 2vw, 1.5rem);
   --space-block: clamp(1rem, 3vw, 1.75rem);
   --touch-min: 44px;
   --content-max: min(100%, 70rem);
-  --col-backlog: #94a3b8;
-  --col-in-progress: #3b82f6;
-  --col-review: #f59e0b;
-  --col-done: #10b981;
-  --gradient-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
-  --gradient-accent: linear-gradient(135deg, #14b8a6 0%, #06b6d4 100%);
+  --col-backlog: #9a968f;
+  --col-in-progress: #2f8f75;
+  --col-review: #e67e22;
+  --col-done: #27ae60;
+  --gradient-primary: linear-gradient(135deg, #d35a3a 0%, #e47a5d 50%, #e8876d 100%);
+  --gradient-accent: linear-gradient(135deg, #2f8f75 0%, #61a894 100%);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -50,9 +50,10 @@ body,
 }
 
 body {
-  font-family: 'Inter', system-ui, 'Segoe UI', Roboto, Ubuntu, sans-serif;
+  font-family: 'DM Sans', system-ui, 'Segoe UI', Roboto, Ubuntu, sans-serif;
   background:
-    radial-gradient(ellipse 80% 50% at 50% -10%, color-mix(in srgb, var(--tf-primary) 6%, transparent) 0%, transparent 50%),
+    radial-gradient(circle at 15% 20%, color-mix(in srgb, var(--tf-primary) 10%, transparent) 0%, transparent 40%),
+    radial-gradient(circle at 80% 70%, color-mix(in srgb, var(--tf-accent) 12%, transparent) 0%, transparent 42%),
     var(--tf-bg);
   color: var(--tf-text);
   line-height: 1.55;
@@ -87,12 +88,13 @@ code {
 }
 
 a {
-  color: var(--tf-primary);
+  color: color-mix(in srgb, var(--tf-accent) 85%, #145848);
   text-decoration: none;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 a:hover {
+  color: var(--tf-text);
   text-decoration: underline;
 }
 
@@ -111,7 +113,8 @@ a:hover {
 h1,
 h2,
 h3 {
-  font-weight: 600;
+  font-family: 'Syne', 'DM Sans', system-ui, sans-serif;
+  font-weight: 700;
   letter-spacing: -0.02em;
   margin: 0 0 0.5rem;
 }
@@ -129,16 +132,17 @@ textarea {
   justify-content: center;
   gap: 0.35rem;
   border: 0;
-  border-radius: var(--tf-radius-sm);
+  border-radius: 0.45rem;
   padding: 0.5rem 1.1rem;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
   transition: all 0.2s ease;
-  background: var(--gradient-primary);
-  color: #fff;
-  box-shadow: 0 2px 8px color-mix(in srgb, var(--tf-primary) 25%, transparent);
+  background: linear-gradient(135deg, var(--tf-primary), var(--tf-primary-pressed));
+  color: #fff8f1;
+  box-shadow: 0 3px 0 color-mix(in srgb, var(--tf-primary) 72%, #6a2518);
   position: relative;
   overflow: hidden;
+  font-family: inherit;
 }
 
 .tf-btn::after {
@@ -151,25 +155,25 @@ textarea {
 
 .tf-btn:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 16px color-mix(in srgb, var(--tf-primary) 30%, transparent);
-  filter: brightness(1.08);
+  box-shadow: 0 4px 0 color-mix(in srgb, var(--tf-primary) 72%, #6a2518);
+  background: linear-gradient(135deg, #e06644, #c84a31);
 }
 
 .tf-btn:active {
-  transform: translateY(0);
-  box-shadow: 0 1px 4px color-mix(in srgb, var(--tf-primary) 20%, transparent);
+  transform: translateY(1px);
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--tf-primary) 72%, #6a2518);
 }
 
 .tf-btn.secondary {
   background: var(--tf-bg-elevated);
   color: var(--tf-text);
-  border: 1px solid var(--tf-border);
+  border: 1.5px solid color-mix(in srgb, var(--tf-accent) 70%, #1f6855);
   box-shadow: var(--tf-shadow);
 }
 
 .tf-btn.secondary:hover {
-  background: color-mix(in srgb, var(--tf-primary) 4%, var(--tf-bg-elevated));
-  border-color: color-mix(in srgb, var(--tf-primary) 30%, var(--tf-border));
+  background: color-mix(in srgb, var(--tf-accent) 8%, var(--tf-bg-elevated));
+  border-color: color-mix(in srgb, var(--tf-accent) 90%, #1f6855);
 }
 
 .tf-btn.ghost {
@@ -179,34 +183,37 @@ textarea {
 }
 
 .tf-btn.ghost:hover {
-  background: color-mix(in srgb, var(--tf-primary) 5%, transparent);
-  color: var(--tf-primary);
+  background: color-mix(in srgb, var(--tf-accent) 8%, transparent);
+  color: var(--tf-text);
 }
 
 .tf-btn.danger {
-  background: linear-gradient(135deg, #ef4444, #f97316);
-  box-shadow: 0 2px 8px color-mix(in srgb, #ef4444 25%, transparent);
+  background: linear-gradient(135deg, #c0392b, #e74c3c);
+  box-shadow: 0 3px 0 color-mix(in srgb, #c0392b 72%, #6a1510);
 }
 
 .tf-btn.danger:hover {
-  box-shadow: 0 4px 16px color-mix(in srgb, #ef4444 30%, transparent);
-  filter: brightness(1.08);
+  box-shadow: 0 4px 0 color-mix(in srgb, #c0392b 72%, #6a1510);
+  transform: translateY(-1px);
 }
 
 .tf-input {
   width: 100%;
   padding: 0.55rem 0.8rem;
   border: 1.5px solid var(--tf-border);
-  border-radius: var(--tf-radius-sm);
+  border-radius: 0.45rem;
   background: var(--tf-bg-elevated);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
+  color: var(--tf-text);
+  font-family: inherit;
 }
 
 .tf-input:focus {
   outline: none;
-  border-color: var(--tf-primary);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--tf-primary) 12%, transparent);
+  border-color: color-mix(in srgb, var(--tf-accent) 75%, #1a5c4c);
+  background: #fff;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--tf-accent) 25%, transparent);
 }
 
 .tf-input::placeholder {
@@ -217,15 +224,17 @@ textarea {
 .tf-input:focus-visible,
 a:focus-visible,
 .tf-nav a:focus-visible {
-  outline: 2px solid var(--tf-primary);
+  outline: 2px solid var(--tf-accent);
   outline-offset: 2px;
 }
 
 .tf-card {
   background: var(--tf-bg-elevated);
   border: 1px solid var(--tf-border);
-  border-radius: var(--tf-radius);
-  box-shadow: var(--tf-shadow);
+  border-radius: 1rem;
+  box-shadow:
+    0 4px 16px rgba(27, 23, 18, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
   padding: 1.1rem 1.35rem;
   transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.2s ease;
   position: relative;
@@ -239,7 +248,7 @@ a:focus-visible,
   left: 0;
   right: 0;
   height: 3px;
-  background: var(--gradient-primary);
+  background: var(--gradient-accent);
   opacity: 0;
   transition: opacity 0.3s ease;
 }
@@ -247,7 +256,7 @@ a:focus-visible,
 .tf-card:hover {
   transform: translateY(-2px);
   box-shadow: var(--tf-shadow-md);
-  border-color: color-mix(in srgb, var(--tf-primary) 20%, var(--tf-border));
+  border-color: color-mix(in srgb, var(--tf-accent) 20%, var(--tf-border));
 }
 
 .tf-card:hover::before {
@@ -276,7 +285,7 @@ a:focus-visible,
   position: sticky;
   top: 0;
   z-index: 50;
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+  box-shadow: 0 1px 3px rgba(27, 23, 18, 0.04);
 }
 
 .tf-topbar__end {
@@ -291,17 +300,15 @@ a:focus-visible,
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  font-family: 'Syne', 'DM Sans', system-ui, sans-serif;
   font-weight: 800;
   font-size: 1.15rem;
   color: var(--tf-text);
-  letter-spacing: -0.02em;
+  letter-spacing: -0.04em;
 }
 
 .tf-brand span:last-child {
-  background: var(--gradient-primary);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: var(--tf-primary);
 }
 
 .tf-nav {
@@ -401,7 +408,7 @@ a:focus-visible,
   left: 50%;
   right: 50%;
   height: 2px;
-  background: var(--gradient-primary);
+  background: var(--gradient-accent);
   border-radius: 2px;
   transition: left 0.25s ease, right 0.25s ease;
   opacity: 0;
@@ -409,9 +416,9 @@ a:focus-visible,
 
 .tf-nav a.active,
 .tf-nav a:hover {
-  color: var(--tf-primary);
+  color: var(--tf-accent);
   text-decoration: none;
-  background: color-mix(in srgb, var(--tf-primary) 6%, transparent);
+  background: color-mix(in srgb, var(--tf-accent) 8%, transparent);
 }
 
 .tf-nav a.active::after,
@@ -424,7 +431,7 @@ a:focus-visible,
 @media (min-width: 900px) {
   .tf-nav a.active,
   .tf-nav a:hover {
-    background: color-mix(in srgb, var(--tf-primary) 8%, transparent);
+    background: color-mix(in srgb, var(--tf-accent) 10%, transparent);
   }
 }
 
@@ -452,7 +459,7 @@ a:focus-visible,
   position: fixed;
   inset: 0;
   z-index: 100;
-  background: rgba(15, 23, 42, 0.4);
+  background: rgba(27, 23, 18, 0.4);
   backdrop-filter: blur(2px);
   -webkit-tap-highlight-color: transparent;
 }
@@ -603,8 +610,8 @@ a:focus-visible,
 }
 
 .task-card:hover {
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
-  border-color: color-mix(in srgb, var(--tf-primary) 15%, var(--tf-border));
+  box-shadow: 0 4px 12px rgba(27, 23, 18, 0.08);
+  border-color: color-mix(in srgb, var(--tf-accent) 15%, var(--tf-border));
   transform: translateY(-1px);
 }
 
@@ -853,7 +860,7 @@ label {
 }
 
 .dash-stat:hover {
-  border-color: color-mix(in srgb, var(--tf-primary) 20%, var(--tf-border));
+  border-color: color-mix(in srgb, var(--tf-accent) 20%, var(--tf-border));
   box-shadow: var(--tf-shadow-md);
   transform: translateY(-2px);
 }
@@ -902,24 +909,24 @@ label {
   justify-content: center;
   padding: var(--space-block) var(--space-page);
   background:
-    radial-gradient(ellipse 120% 80% at 20% 0%, color-mix(in srgb, var(--tf-primary) 12%, transparent) 0%, transparent 50%),
-    radial-gradient(ellipse 100% 60% at 80% 100%, color-mix(in srgb, var(--tf-accent) 10%, transparent) 0%, transparent 50%),
-    radial-gradient(ellipse 60% 40% at 50% 120%, color-mix(in srgb, var(--tf-primary) 6%, transparent) 0%, transparent 40%),
+    radial-gradient(circle at 15% 20%, color-mix(in srgb, var(--tf-primary) 16%, transparent) 0%, transparent 40%),
+    radial-gradient(circle at 80% 70%, color-mix(in srgb, var(--tf-accent) 18%, transparent) 0%, transparent 42%),
     var(--tf-bg);
 }
 
 .auth-card {
   width: 100%;
   max-width: 24rem;
-  background: color-mix(in srgb, var(--tf-bg-elevated) 96%, transparent);
+  background: #fffdf8;
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid color-mix(in srgb, var(--tf-border) 80%, var(--tf-primary));
-  border-radius: calc(var(--tf-radius) + 4px);
+  border: 1px solid color-mix(in srgb, var(--tf-border) 80%, #fff);
+  border-radius: 1.4rem;
   box-shadow:
-    0 4px 24px rgba(15, 23, 42, 0.06),
-    0 16px 48px rgba(15, 23, 42, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    0 25px 50px -12px rgba(20, 18, 15, 0.12),
+    0 6px 16px -6px rgba(20, 18, 15, 0.08),
+    0 0 0 1px rgba(255, 255, 255, 0.6),
+    inset 0 1px 0 #fff;
   padding: clamp(1.5rem, 5vw, 2.25rem);
   position: relative;
   overflow: hidden;
@@ -932,15 +939,13 @@ label {
   left: 0;
   right: 0;
   height: 4px;
-  background: var(--gradient-primary);
+  background: linear-gradient(90deg, var(--tf-primary), var(--tf-accent));
 }
 
 .auth-card h1 {
   margin-top: 0;
-  background: var(--gradient-primary);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  font-family: 'Syne', 'DM Sans', system-ui, sans-serif;
+  color: var(--tf-text);
   font-weight: 700;
 }
 
@@ -950,10 +955,8 @@ label {
 
 .page-header h1,
 .page-header h2 {
-  background: var(--gradient-primary);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  font-family: 'Syne', 'DM Sans', system-ui, sans-serif;
+  color: var(--tf-text);
   font-weight: 700;
 }
 
@@ -1012,7 +1015,7 @@ label {
   left: 0;
   right: 0;
   height: 3px;
-  background: var(--gradient-accent);
+  background: linear-gradient(90deg, var(--tf-primary), var(--tf-accent));
   opacity: 0;
   transition: opacity 0.3s ease;
 }
@@ -1026,7 +1029,7 @@ label {
 }
 
 .project-card:hover {
-  border-color: color-mix(in srgb, var(--tf-primary) 20%, var(--tf-border));
+  border-color: color-mix(in srgb, var(--tf-accent) 20%, var(--tf-border));
   box-shadow: var(--tf-shadow-md);
   transform: translateY(-2px);
 }
@@ -1138,7 +1141,7 @@ label {
   border: 0;
   margin: 0;
   padding: 0;
-  background: rgba(15, 23, 42, 0.45);
+  background: rgba(27, 23, 18, 0.45);
   cursor: pointer;
   backdrop-filter: blur(2px);
 }

@@ -43,15 +43,23 @@ export function ShellLayout() {
       )}
       <header className="tf-topbar">
         <div className="tf-brand" role="img" aria-label="TaskFlow">
+          <span style={{ color: '#1b1712' }}>T</span>
+          <span style={{ color: '#2f8f75' }}>a</span>
+          <span style={{ color: '#d35a3a' }}>F</span>
           <span
-            className="pill"
             style={{
-              background: 'var(--tf-primary)',
-              minWidth: 0,
-              padding: '0.1rem 0.35rem',
+              fontWeight: 700,
+              fontSize: '0.95rem',
+              color: '#312720',
+              letterSpacing: '0.08em',
+              textTransform: 'uppercase' as const,
+              borderLeft: '2px solid #e9dcc7',
+              paddingLeft: '0.6rem',
+              marginLeft: '0.1rem',
             }}
-          />
-          <span>TaskFlow</span>
+          >
+            TaskFlow
+          </span>
         </div>
         <nav
           id={menuId}
